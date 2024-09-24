@@ -7,10 +7,18 @@ export interface Project {
   name: string;
   startDate: string;
   endDate: string;
+  background?: string;
+  color?: string;
 }
 
-export interface GanttProps {
+export interface GanttConfig {
+  rowHeight?: number;
+  headHeight?: number;
+  colWidth?: number;
   startDate?: string;
   endDate?: string;
+}
+
+export interface GanttProps extends GanttConfig {
   data: Gantt[];
 }
