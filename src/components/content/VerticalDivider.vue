@@ -4,14 +4,15 @@
 </template>
 
 <script setup lang="ts">
-import dayjs from 'dayjs';
 import { computed } from 'vue';
+import provideWorkDays from '../../provider/provideWorkDays';
 
-const props = defineProps<{ workdays: dayjs.Dayjs[]; }>()
+const workdays = provideWorkDays();
+
 const firdayIndexList = computed(() => {
 	const indexList: number[] = [];
-	for (let index = 0; index < props.workdays.length; index++) {
-		const element = props.workdays[index];
+	for (let index = 0; index < workdays.length; index++) {
+		const element = workdays[index];
 		if (element.day() === 5) {
 			indexList.push(index)
 		}
