@@ -1,5 +1,6 @@
 <template>
-	<div v-if="project.startDate && project.endDate && project.endDate > startDate! && project.startDate < endDate!"
+	<div :id="`gantt-row-${rowIndex}-bar-${index}`"
+		v-if="project.startDate && project.endDate && project.endDate > startDate! && project.startDate < endDate!"
 		class="absolute overflow-hidden text-ellipsis whitespace-nowrap text-center" :style="{
 			top: `${rowHeight! * 0.1}px`,
 			left: `${xStart}px`,
@@ -8,6 +9,7 @@
 			lineHeight: `${rowHeight! * 0.8}px`,
 			background: project.background || defaultBackground,
 			color: project.color || defaultColor,
+			zIndex: isDragging ? 3 : 2
 		}" @mousedown="onMouseEvent">
 		<span class="text-sm px-2">{{ project.name }}</span>
 		<div class="bar-handle-left absolute left-0 top-0 bottom-0 w-2 bg-white opacity-50 cursor-ew-resize"></div>
@@ -24,7 +26,9 @@ import dayjs from 'dayjs';
 import { useThrottle } from '../../composables/useThrottle';
 
 const props = defineProps<{
-	project: Project
+	project: Project;
+	rowIndex: number;
+	index: number;
 }>();
 
 const config = provideConfig();
@@ -88,8 +92,10 @@ const dragBar = useThrottle((e: MouseEvent) => {
 
 	const movedX = e.clientX - clickX.value;
 
-	xStart.value += movedX;
-	xEnd.value += movedX;
+	if (isMovable(movedX)) {
+		xStart.value += movedX;
+		xEnd.value += movedX;
+	}
 
 	clickX.value = e.clientX;
 }, gapTime);
@@ -101,7 +107,7 @@ const dragBarByLeftHandle = useThrottle((e: MouseEvent) => {
 
 	const movedX = e.clientX - clickX.value;
 
-	if (xEnd.value - (xStart.value + movedX) > colWidth.value) {
+	if (isMovable(movedX) && (xEnd.value - (xStart.value + movedX) > colWidth.value)) {
 		xStart.value += movedX;
 	}
 
@@ -115,10 +121,43 @@ const dragBarByRightHandle = useThrottle((e: MouseEvent) => {
 
 	const movedX = e.clientX - clickX.value;
 
-	if (xEnd.value + movedX - (xStart.value) > colWidth.value) {
+	if (isMovable(movedX) && (xEnd.value + movedX - (xStart.value) > colWidth.value)) {
 		xEnd.value += movedX;
 	}
 
 	clickX.value = e.clientX;
 }, gapTime);
+
+const isMovable = (movedX: number) => {
+	let canMove = true;
+	const currentDiv = document.getElementById(`gantt-row-${props.rowIndex}-bar-${props.index}`) as HTMLElement;
+	const currentLeft = currentDiv.offsetLeft;
+	const currentRight = currentLeft + currentDiv.offsetWidth;
+
+	const newLeft = currentLeft + movedX;
+	const newRight = currentRight + movedX;
+	const siblings = document.getElementById(`gantt-row-${props.rowIndex}`)?.children;
+	if (siblings) {
+		for (let i = 0; i < siblings.length; i++) {
+			const sibling = siblings[i] as HTMLElement;
+
+			// 跳过当前拖动的 div
+			if (sibling === currentDiv) continue;
+
+			// 获取其他 div 的相对位置
+			const siblingLeft = sibling.offsetLeft;
+			const siblingRight = siblingLeft + sibling.offsetWidth;
+
+			// 检查是否重叠
+			if (
+				(newLeft < siblingRight && newRight > siblingLeft) || // 当前div的左边和其他div的右边重叠
+				(newRight > siblingLeft && newLeft < siblingRight)    // 当前div的右边和其他div的左边重叠
+			) {
+				canMove = false;
+				break;
+			}
+		}
+	}
+	return canMove;
+}
 </script>
