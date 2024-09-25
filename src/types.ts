@@ -1,3 +1,5 @@
+import { ToRefs } from "vue";
+
 export interface Gantt {
   name: string;
   projects: Project[];
@@ -22,3 +24,5 @@ export interface GanttConfig {
 export interface GanttProps extends GanttConfig {
   data: Gantt[];
 }
+
+export type Config = ToRefs<Required<GanttProps>>;

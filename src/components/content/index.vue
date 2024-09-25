@@ -8,7 +8,7 @@
 <script setup lang="ts">
 import VerticalDivider from './VerticalDivider.vue';
 import GanttRow from './GanttRow.vue';
-import provideGanttData from '../../provider/provideData';
+import provideConfig from '../../provider/provideConfig';
 
-const data = provideGanttData();
+const { data } = provideConfig();
 </script>

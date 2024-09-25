@@ -1,5 +1,5 @@
 <template>
-	<div class="size-full flex">
+	<div class="size-full flex select-none">
 		<div class="w-[272px] overflow-hidden">
 			<Left />
 		</div>
@@ -18,11 +18,11 @@
 <script setup lang="ts">
 import dayjs from 'dayjs';
 import { GanttProps } from './types';
-import { computed, provide } from 'vue';
+import { computed, provide, toRefs } from 'vue';
 import TimeHead from './components/TimeHead.vue';
 import Left from './components/Left.vue';
 import Content from './components/content/index.vue';
-import { CONFIG, GANTT_DATA, WORK_DAYS } from './provider/symbols';
+import { CONFIG, WORK_DAYS } from './provider/symbols';
 
 const props = withDefaults(defineProps<GanttProps>(), {
 	startDate: dayjs().format('YYYY-MM-DD'),
@@ -51,9 +51,8 @@ const workdays = computed(() => {
 	return workdays;
 })
 
-provide(GANTT_DATA, props.data);
 provide(WORK_DAYS, workdays.value);
 provide(CONFIG, {
-	...props,
+	...toRefs(props)
 });
 </script>

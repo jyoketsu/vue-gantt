@@ -12,9 +12,7 @@
 </template>
 
 <script setup lang="ts">
-import provideData from '../provider/provideData';
 import provideConfig from '../provider/provideConfig';
 
-const data = provideData();
-const { rowHeight, headHeight } = provideConfig();
+const { rowHeight, headHeight, data } = provideConfig();
 </script>
