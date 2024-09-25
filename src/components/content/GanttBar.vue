@@ -9,7 +9,8 @@
 			lineHeight: `${rowHeight! * 0.8}px`,
 			background: project.background || defaultBackground,
 			color: project.color || defaultColor,
-			zIndex: isDragging ? 3 : 2
+			zIndex: isDragging ? 3 : 2,
+			transition: isDragging ? 'none' : 'left 0.5s,width 0.5s'
 		}" @mousedown="onMouseEvent">
 		<span class="text-sm px-2">{{ project.name }}</span>
 		<div class="bar-handle-left absolute left-0 top-0 bottom-0 w-2 bg-white opacity-50 cursor-ew-resize"></div>
@@ -19,10 +20,9 @@
 <script setup lang="ts">
 import { Project } from '../../types';
 import provideConfig from '../../provider/provideConfig';
-import { onMounted, ref, toRefs, watch } from 'vue';
+import { onMounted, ref, watch } from 'vue';
 import useTime2Position from '../../composables/useTime2Position';
 import { getDefaultStyle } from '../../util';
-import dayjs from 'dayjs';
 import { useThrottle } from '../../composables/useThrottle';
 
 const props = defineProps<{
@@ -79,6 +79,8 @@ const onMouseEvent = (e: MouseEvent) => {
 			() => {
 				window.removeEventListener("mousemove", dragCallBack)
 				isDragging.value = false
+				xStart.value = getRoundedPosition(xStart.value)
+				xEnd.value = getRoundedPosition(xEnd.value)
 			},
 			{ once: true }
 		)
@@ -160,4 +162,8 @@ const isMovable = (movedX: number) => {
 	}
 	return canMove;
 }
+
+const getRoundedPosition = (position: number) => {
+	return Math.round(position / colWidth.value) * colWidth.value;
+};
 </script>
