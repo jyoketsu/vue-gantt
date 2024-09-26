@@ -1,5 +1,6 @@
 <template>
-  <GanttChart :data="ganttTestData" :start-date="startDate" :end-date="endDate">
+  <GanttChart :data="data" :start-date="startDate" :end-date="endDate"
+    @dragend-bar="handleDragEnd($event.e, $event.bar, $event.barIndex, $event.rowIndex)">
     <template #gantt-left-head>
       <div class="size-full grid grid-cols-3">
         <div class="px-1 border-r">职位</div>
@@ -16,20 +17,22 @@
     </template>
     <template #gantt-bar-content="{ project }">
       <div class="w-full h-full overflow-hidden whitespace-nowrap text-ellipsis" :title="project.name">
-        {{ project.name }}</div>
+        {{ project.startDate }}</div>
     </template>
   </GanttChart>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { reactive, ref } from 'vue';
 import GanttChart from './Gantt.vue'
 import { ganttTestData } from './demoData';
 import dayjs from 'dayjs';
 import { isWeekday } from './util';
+import { Project } from './types';
 
 const startDate = ref(dayjs().format('YYYY-MM-DD'))
 const endDate = ref(dayjs().add(3, 'month').format())
+const data = reactive(ganttTestData)
 
 const calculateWorkingDays = (
   startDate: dayjs.Dayjs,
@@ -63,6 +66,14 @@ const calculateWorkingHoursForRow = (projects: any[]): number => {
 
   return totalWorkingHours;
 };
+
+const handleDragEnd = (e: MouseEvent,
+  bar: Project,
+  barIndex: number,
+  rowIndex: number) => {
+  console.log('---drag-end---', e, bar, barIndex, rowIndex);
+  data[rowIndex].projects[barIndex] = bar;
+}
 </script>
 
 <style scoped>

@@ -1,6 +1,7 @@
 import { ToRefs } from "vue";
 
 export interface Gantt {
+  [key: string]: any;
   name: string;
   projects: Project[];
 }
@@ -26,3 +27,10 @@ export interface GanttProps extends GanttConfig {
 }
 
 export type Config = ToRefs<Required<GanttProps>>;
+
+export type EmitBarEvent = (
+  e: MouseEvent,
+  bar: Project,
+  barIndex: number,
+  rowIndex: number
+) => void;

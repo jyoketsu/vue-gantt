@@ -28,12 +28,12 @@
 
 <script setup lang="ts">
 import dayjs from 'dayjs';
-import { GanttProps } from './types';
+import { GanttProps, Project } from './types';
 import { computed, provide, toRefs } from 'vue';
 import TimeHead from './components/TimeHead.vue';
 import Left from './components/Left.vue';
 import Content from './components/content/index.vue';
-import { CONFIG, WORK_DAYS } from './provider/symbols';
+import { CONFIG, EMIT_BAR_EVENT, WORK_DAYS } from './provider/symbols';
 import { isWeekday } from './util';
 
 const props = withDefaults(defineProps<GanttProps>(), {
@@ -41,6 +41,15 @@ const props = withDefaults(defineProps<GanttProps>(), {
 	headHeight: 32,
 	colWidth: 32,
 })
+
+const emit = defineEmits<{
+	(e: "dragend-bar", value: {
+		e: MouseEvent,
+		bar: Project,
+		barIndex: number,
+		rowIndex: number
+	}): void
+}>()
 
 const workdays = computed(() => {
 	let start = dayjs(props.startDate);
@@ -58,8 +67,18 @@ const workdays = computed(() => {
 	return workdays;
 })
 
+const emitBarEvent = (
+	e: MouseEvent,
+	bar: Project,
+	barIndex: number,
+	rowIndex: number
+) => {
+	emit("dragend-bar", { e, bar, barIndex, rowIndex })
+}
+
 provide(WORK_DAYS, workdays.value);
 provide(CONFIG, {
 	...toRefs(props)
 });
+provide(EMIT_BAR_EVENT, emitBarEvent)
 </script>

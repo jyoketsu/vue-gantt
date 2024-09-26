@@ -22,10 +22,11 @@
 <script setup lang="ts">
 import { Project } from '../../types';
 import provideConfig from '../../provider/provideConfig';
-import { onMounted, ref, watch } from 'vue';
+import { onMounted, ref, toRefs, watch } from 'vue';
 import useTime2Position from '../../composables/useTime2Position';
 import { getDefaultStyle } from '../../util';
 import { useThrottle } from '../../composables/useThrottle';
+import provideEmitBarEvent from '../../provider/provideEmitBarEvent';
 
 const props = defineProps<{
 	project: Project;
@@ -34,10 +35,11 @@ const props = defineProps<{
 }>();
 
 const config = provideConfig();
+const emitBarEvent = provideEmitBarEvent();
 const { startDate, endDate, colWidth, rowHeight } = config;
 
-// const { project } = toRefs(props)
-const project = ref({ ...props.project })
+const { project } = toRefs(props)
+// const project = ref({ ...props.project })
 const xStart = ref(0)
 const xEnd = ref(0)
 const defaultBackground = ref('');
@@ -45,7 +47,7 @@ const defaultColor = ref('');
 const isDragging = ref(false);
 const clickX = ref(0);
 const gapTime = 16.666;
-const { time2position } = useTime2Position();
+const { time2position, position2time } = useTime2Position();
 
 watch([project, startDate, endDate, colWidth], () => {
 	xStart.value = time2position(project.value.startDate, true);
@@ -78,11 +80,14 @@ const onMouseEvent = (e: MouseEvent) => {
 		window.addEventListener("mousemove", dragCallBack) // on first mousemove event
 		window.addEventListener(
 			"mouseup",
-			() => {
+			(e: MouseEvent) => {
 				window.removeEventListener("mousemove", dragCallBack)
 				isDragging.value = false
 				xStart.value = getRoundedPosition(xStart.value)
 				xEnd.value = getRoundedPosition(xEnd.value)
+				const newStartDate = position2time(xStart.value, true);
+				const newEndDate = position2time(xEnd.value, false);
+				emitBarEvent(e, { ...project.value, startDate: newStartDate, endDate: newEndDate }, props.index, props.rowIndex);
 			},
 			{ once: true }
 		)

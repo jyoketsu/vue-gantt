@@ -86,7 +86,7 @@ export const ganttTestData = [
     projects: [
       { name: "Project 1", startDate: "2024-04-01", endDate: "2024-04-28" },
       { name: "Project 2", startDate: "2024-07-22", endDate: "2024-08-19" },
-      { name: "Project 3", startDate: "2024-09-10", endDate: "2024-10-07" },
+      { name: "Project 3", startDate: "2024-09-23", endDate: "2024-9-26" },
     ],
   },
 ];
