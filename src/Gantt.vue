@@ -1,6 +1,6 @@
 <template>
 	<div class="size-full flex select-none">
-		<div class="w-[272px] overflow-hidden">
+		<div class="overflow-hidden" :style="{ width: `${leftWidth}px` }">
 			<Left>
 				<template #gantt-left-head>
 					<slot name="gantt-left-head" />
@@ -10,7 +10,7 @@
 				</template>
 			</Left>
 		</div>
-		<div class="w-[1px] h-full border-r relative overflow-visible cursor-ew-resize">
+		<div class="w-[1px] h-full border-r relative overflow-visible cursor-ew-resize" @mousedown="handleMouseDown">
 			<div class="absolute -left-3 top-0 -right-3 bottom-0"></div>
 		</div>
 		<div class="flex-1 overflow-auto">
@@ -29,12 +29,13 @@
 <script setup lang="ts">
 import dayjs from 'dayjs';
 import { GanttProps, Project } from './types';
-import { computed, provide, toRefs } from 'vue';
+import { computed, provide, ref, toRefs } from 'vue';
 import TimeHead from './components/TimeHead.vue';
 import Left from './components/Left.vue';
 import Content from './components/content/index.vue';
 import { CONFIG, EMIT_BAR_EVENT, WORK_DAYS } from './provider/symbols';
 import { isWeekday } from './util';
+import { useThrottle } from './composables/useThrottle';
 
 const props = withDefaults(defineProps<GanttProps>(), {
 	rowHeight: 36,
@@ -51,6 +52,11 @@ const emit = defineEmits<{
 	}): void
 }>()
 
+const leftWidth = ref(272);
+const isDragging = ref(false);
+const clickX = ref(0);
+const gapTime = 16.666;
+
 const workdays = computed(() => {
 	let start = dayjs(props.startDate);
 	const end = dayjs(props.endDate);
@@ -66,6 +72,36 @@ const workdays = computed(() => {
 	}
 	return workdays;
 })
+
+const handleMouseDown = (e: MouseEvent) => {
+	e.preventDefault()
+	if (e.type === "mousedown") {
+		clickX.value = e.clientX;
+		window.addEventListener("mousemove", dragBar)
+		window.addEventListener(
+			"mouseup",
+			(e: MouseEvent) => {
+				window.removeEventListener("mousemove", dragBar)
+				isDragging.value = false
+			},
+			{ once: true }
+		)
+	}
+}
+
+const dragBar = useThrottle((e: MouseEvent) => {
+	if (!isDragging.value) {
+		isDragging.value = true;
+	}
+
+	const movedX = e.clientX - clickX.value;
+
+	if (leftWidth.value + movedX > 200) {
+		leftWidth.value += movedX
+	}
+
+	clickX.value = e.clientX;
+}, gapTime);
 
 const emitBarEvent = (
 	e: MouseEvent,

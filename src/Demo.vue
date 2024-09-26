@@ -16,8 +16,10 @@
       </div>
     </template>
     <template #gantt-bar-content="{ project }">
-      <div class="w-full h-full overflow-hidden whitespace-nowrap text-ellipsis" :title="project.name">
-        {{ project.startDate }}</div>
+      <div class="w-full h-full overflow-hidden text-sm flex justify-center items-center"
+        :title="project.name">
+        <span class="overflow-hidden whitespace-nowrap text-ellipsis">{{ `${project.startDate} : ${project.endDate}` }}</span>
+      </div>
     </template>
   </GanttChart>
 </template>
