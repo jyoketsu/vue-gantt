@@ -14,11 +14,11 @@ export interface Project {
 }
 
 export interface GanttConfig {
+  startDate: string;
+  endDate: string;
   rowHeight?: number;
   headHeight?: number;
   colWidth?: number;
-  startDate?: string;
-  endDate?: string;
 }
 
 export interface GanttProps extends GanttConfig {

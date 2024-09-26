@@ -1,7 +1,6 @@
-import { Gantt } from "./types";
-
-export const ganttTestData: Gantt[] = [
+export const ganttTestData = [
   {
+    position: "产品",
     name: "Gantt 1",
     projects: [
       { name: "Project 1", startDate: "2024-09-24", endDate: "2024-09-30" },
@@ -10,6 +9,7 @@ export const ganttTestData: Gantt[] = [
     ],
   },
   {
+    position: "设计",
     name: "Gantt 2",
     projects: [
       { name: "Project 1", startDate: "2024-10-05", endDate: "2024-10-28" },
@@ -18,6 +18,7 @@ export const ganttTestData: Gantt[] = [
     ],
   },
   {
+    position: "开发",
     name: "Gantt 3",
     projects: [
       { name: "Project 1", startDate: "2024-05-03", endDate: "2024-05-30" },
@@ -26,6 +27,7 @@ export const ganttTestData: Gantt[] = [
     ],
   },
   {
+    position: "开发",
     name: "Gantt 4",
     projects: [
       { name: "Project 1", startDate: "2024-07-20", endDate: "2024-08-18" },
@@ -34,6 +36,7 @@ export const ganttTestData: Gantt[] = [
     ],
   },
   {
+    position: "测试",
     name: "Gantt 5",
     projects: [
       { name: "Project 1", startDate: "2024-04-08", endDate: "2024-05-01" },
@@ -42,6 +45,7 @@ export const ganttTestData: Gantt[] = [
     ],
   },
   {
+    position: "测试",
     name: "Gantt 6",
     projects: [
       { name: "Project 1", startDate: "2024-02-14", endDate: "2024-03-10" },
@@ -50,6 +54,7 @@ export const ganttTestData: Gantt[] = [
     ],
   },
   {
+    position: "运维",
     name: "Gantt 7",
     projects: [
       { name: "Project 1", startDate: "2024-01-05", endDate: "2024-02-03" },
@@ -58,6 +63,7 @@ export const ganttTestData: Gantt[] = [
     ],
   },
   {
+    position: "财务",
     name: "Gantt 8",
     projects: [
       { name: "Project 1", startDate: "2024-03-20", endDate: "2024-04-15" },
@@ -66,6 +72,7 @@ export const ganttTestData: Gantt[] = [
     ],
   },
   {
+    position: "人事",
     name: "Gantt 9",
     projects: [
       { name: "Project 1", startDate: "2024-06-12", endDate: "2024-07-10" },
@@ -74,6 +81,7 @@ export const ganttTestData: Gantt[] = [
     ],
   },
   {
+    position: "行政",
     name: "Gantt 10",
     projects: [
       { name: "Project 1", startDate: "2024-04-01", endDate: "2024-04-28" },

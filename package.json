@@ -8,9 +8,6 @@
     "build": "vue-tsc -b && vite build",
     "preview": "vite preview"
   },
-  "dependencies": {
-    "vue-gantt": "file:"
-  },
   "devDependencies": {
     "@types/node": "^22.5.5",
     "@vitejs/plugin-vue": "^5.1.2",
@@ -22,7 +19,12 @@
     "vue-tsc": "^2.0.29"
   },
   "peerDependencies": {
-    "dayjs": "^1.11.13",
-    "vue": "^3.4.37"
+    "dayjs": "^1.11.5",
+    "vue": "^3.2.40"
+  },
+  "dependencies": {
+    "dayjs": "^1.11.5",
+    "vue": "^3.2.40",
+    "vue-gantt": "file:"
   }
 }

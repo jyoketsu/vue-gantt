@@ -1,3 +1,5 @@
+import dayjs from "dayjs";
+
 const defaultStyles = [
   { background: "#d4b9b0", color: "#4a2d2b" },
   { background: "#b8a59d", color: "#3b2a27" },
@@ -24,4 +26,10 @@ const defaultStyles = [
 export function getDefaultStyle() {
   const randomIndex = Math.floor(Math.random() * defaultStyles.length);
   return defaultStyles[randomIndex];
+}
+
+export function isWeekday(date: dayjs.Dayjs): boolean {
+  // 判断是否是工作日（周一到周五）
+  const day = date.day();
+  return day !== 0 && day !== 6; // 0: Sunday, 6: Saturday
 }

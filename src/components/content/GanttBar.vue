@@ -1,7 +1,7 @@
 <template>
 	<div :id="`gantt-row-${rowIndex}-bar-${index}`"
 		v-if="project.startDate && project.endDate && project.endDate > startDate! && project.startDate < endDate!"
-		class="absolute overflow-hidden text-ellipsis whitespace-nowrap text-center" :style="{
+		class="absolute overflow-hidden text-ellipsis whitespace-nowrap text-center px-2" :style="{
 			top: `${rowHeight! * 0.1}px`,
 			left: `${xStart}px`,
 			width: `${xEnd - xStart}px`,
@@ -12,7 +12,9 @@
 			zIndex: isDragging ? 3 : 2,
 			transition: isDragging ? 'none' : 'left 0.5s,width 0.5s'
 		}" @mousedown="onMouseEvent">
-		<span class="text-sm px-2">{{ project.name }}</span>
+		<slot name="gantt-bar-content" :project="project">
+			<span class="text-sm px-2">{{ project.name }}</span>
+		</slot>
 		<div class="bar-handle-left absolute left-0 top-0 bottom-0 w-2 bg-white opacity-50 cursor-ew-resize"></div>
 		<div class="bar-handle-right absolute right-0 top-0 bottom-0 w-2 bg-white opacity-50 cursor-ew-resize"></div>
 	</div>
