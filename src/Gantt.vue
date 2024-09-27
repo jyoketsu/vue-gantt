@@ -33,12 +33,12 @@
 <script setup lang="ts">
 import dayjs from 'dayjs';
 import { Gantt, GanttProps, Project } from './types';
-import { computed, provide, ref, toRefs } from 'vue';
+import { computed, provide, ref, toRef, toRefs } from 'vue';
 import TimeHead from './components/TimeHead.vue';
 import Left from './components/Left.vue';
 import Content from './components/content/index.vue';
 import { CONFIG, EMIT_BAR_EVENT, EMIT_ROW_EVENT, COLS } from './provider/symbols';
-import { isWeekday } from './util';
+import { getMonthFirstDay, isWeekday } from './util';
 import { useThrottle } from './composables/useThrottle';
 
 const props = withDefaults(defineProps<GanttProps>(), {
@@ -77,18 +77,26 @@ const clickX = ref(0);
 const gapTime = 16.666;
 
 const cols = computed(() => {
-	let start = dayjs(props.startDate);
-	const end = dayjs(props.endDate);
+	let start = props.cellUnit === 'day' ? dayjs(props.startDate) : dayjs(getMonthFirstDay(props.startDate));
+	const end = props.cellUnit === 'day' ? dayjs(props.endDate) : dayjs(getMonthFirstDay(props.endDate));
 	const cols: dayjs.Dayjs[] = [];
 
 	// Loop through each day between startDate and endDate
-	while (start.isBefore(end) || start.isSame(end, 'day')) {
-		if (isWeekday(start)) {
-			cols.push(start);
+	if (props.cellUnit === 'day') {
+		while (start.isBefore(end) || start.isSame(end, 'day')) {
+			if (isWeekday(start)) {
+				cols.push(start);
+			}
+			// Move to the next day
+			start = start.add(1, 'day');
 		}
-		// Move to the next day
-		start = start.add(1, 'day');
+	} else {
+		while (start.isBefore(end) || start.isSame(end, 'day')) {
+			cols.push(start);
+			start = start.add(1, 'month');
+		}
 	}
+
 	return cols;
 })
 
@@ -148,7 +156,7 @@ const emitRowEvent = (e: MouseEvent,
 	emit('click-row', { e, row, time, rowIndex })
 }
 
-provide(COLS, cols.value);
+provide(COLS, cols);
 provide(CONFIG, {
 	...toRefs(props)
 });

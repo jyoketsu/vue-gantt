@@ -33,3 +33,7 @@ export function isWeekday(date: dayjs.Dayjs): boolean {
   const day = date.day();
   return day !== 0 && day !== 6; // 0: Sunday, 6: Saturday
 }
+
+export function getMonthFirstDay(time: string): string {
+  return dayjs(time).startOf("month").format("YYYY-MM-DD");
+}

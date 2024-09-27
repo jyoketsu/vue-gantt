@@ -1,42 +1,56 @@
 <template>
-  <GanttChart :data="data" :start-date="startDate" :end-date="endDate"
-    @dragend-bar="handleDragEnd($event.e, $event.bar, $event.barIndex, $event.rowIndex)"
-    @click-bar="handleClickBar($event.e, $event.bar, $event.barIndex, $event.rowIndex)"
-    @click-row="handleClickRow($event.e, $event.row, $event.time, $event.rowIndex)">
-    <template #gantt-left-head>
-      <div class="size-full grid grid-cols-3">
-        <div class="px-1 border-r">职位</div>
-        <div class="px-1 border-r">姓名</div>
-        <div class="px-1">工时</div>
-      </div>
-    </template>
-    <template #gantt-left-row="{ row }">
-      <div class="size-full grid grid-cols-3">
-        <div class="px-1 border-r">{{ row.position }}</div>
-        <div class="px-1 border-r">{{ row.name }}</div>
-        <div class="px-1">{{ calculateWorkingHoursForRow(row.projects) }}</div>
-      </div>
-    </template>
-    <template #gantt-bar-content="{ project }">
-      <div class="w-full h-full overflow-hidden text-sm flex justify-center items-center" :title="project.name">
-        <span class="overflow-hidden whitespace-nowrap text-ellipsis">{{ `${project.startDate} : ${project.endDate}`
-          }}</span>
-      </div>
-    </template>
-  </GanttChart>
+  <div class="size-full flex flex-col">
+    <div class="w-full h-8 border-b flex items-center p-2 space-x-2 text-zinc-400">
+      <span class="flex-1"></span>
+      <span class="cursor-pointer" :class="{ 'text-blue-400': cellUnit === 'day' }" @click="cellUnit = 'day'">M</span>
+      <span class="cursor-pointer" :class="{ 'text-blue-400': cellUnit === 'month' }"
+        @click="cellUnit = 'month'">Y</span>
+    </div>
+    <div class="flex-1">
+      <GanttChart :data="data" :start-date="startDate" :end-date="endDate" :cell-unit="cellUnit" :col-width="colWidth"
+        @dragend-bar="handleDragEnd($event.e, $event.bar, $event.barIndex, $event.rowIndex)"
+        @click-bar="handleClickBar($event.e, $event.bar, $event.barIndex, $event.rowIndex)"
+        @click-row="handleClickRow($event.e, $event.row, $event.time, $event.rowIndex)">
+        <template #gantt-left-head>
+          <div class="size-full grid grid-cols-3">
+            <div class="px-1 border-r">职位</div>
+            <div class="px-1 border-r">姓名</div>
+            <div class="px-1">工时</div>
+          </div>
+        </template>
+        <template #gantt-left-row="{ row }">
+          <div class="size-full grid grid-cols-3">
+            <div class="px-1 border-r">{{ row.position }}</div>
+            <div class="px-1 border-r">{{ row.name }}</div>
+            <div class="px-1">{{ calculateWorkingHoursForRow(row.projects) }}</div>
+          </div>
+        </template>
+        <template #gantt-bar-content="{ project }">
+          <div class="w-full h-full overflow-hidden text-sm flex justify-center items-center" :title="project.name">
+            <span class="overflow-hidden whitespace-nowrap text-ellipsis">{{ `${project.startDate} : ${project.endDate}`
+              }}</span>
+          </div>
+        </template>
+      </GanttChart>
+    </div>
+
+  </div>
+
 </template>
 
 <script setup lang="ts">
-import { reactive, ref } from 'vue';
+import { computed, reactive, ref } from 'vue';
 import GanttChart from './Gantt.vue'
 import { ganttTestData } from './demoData';
 import dayjs from 'dayjs';
 import { isWeekday } from './util';
 import { Gantt, Project } from './types';
 
-const startDate = ref(dayjs('2024-09-24').format('YYYY-MM-DD'))
-const endDate = ref(dayjs().add(3, 'month').format())
+const startDate = ref(dayjs('2024-02-01').format('YYYY-MM-DD'))
+const endDate = ref(dayjs('2024-02-01').add(12, 'month').format())
 const data = reactive(ganttTestData)
+const cellUnit = ref<'day' | 'month'>('month')
+const colWidth = computed(() => cellUnit.value === 'day' ? 32 : 120)
 
 const calculateWorkingDays = (
   startDate: dayjs.Dayjs,

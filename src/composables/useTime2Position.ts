@@ -2,30 +2,59 @@ import dayjs from "dayjs";
 import provideConfig from "../provider/provideConfig";
 
 export default function useTime2Position() {
-  const { colWidth, startDate } = provideConfig();
+  const { colWidth, startDate, cellUnit } = provideConfig();
 
   const time2position = (time: string, isStart: boolean) => {
-    // const diffFromStart = dayjs(time).diff(startDate, "day", true);
-    let workdayDiffFromStart = calculateWorkdayDiff(startDate.value!, time);
-    if (workdayDiffFromStart > 0) {
-      workdayDiffFromStart = isStart
-        ? workdayDiffFromStart - 1
-        : workdayDiffFromStart;
-    } else {
-      workdayDiffFromStart = isStart
-        ? workdayDiffFromStart + 1
-        : workdayDiffFromStart;
-    }
+    if (cellUnit.value === "day") {
+      let workdayDiffFromStart = calculateWorkdayDiff(startDate.value!, time);
+      if (workdayDiffFromStart > 0) {
+        workdayDiffFromStart = isStart
+          ? workdayDiffFromStart - 1
+          : workdayDiffFromStart;
+      } else {
+        workdayDiffFromStart = isStart
+          ? workdayDiffFromStart + 1
+          : workdayDiffFromStart;
+      }
 
-    return Math.ceil(workdayDiffFromStart * colWidth.value!);
+      return Math.ceil(workdayDiffFromStart * colWidth.value!);
+    } else {
+      const diffFromStart = isStart
+        ? dayjs(time).diff(startDate.value, "month", true)
+        : dayjs(time).add(1, "day").diff(startDate.value, "month", true);
+      // console.log("---diffFromStart---", diffFromStart);
+      return Math.ceil(diffFromStart * colWidth.value);
+    }
   };
 
   const position2time = (position: number, isStart: boolean) => {
-    let workdayDiff = Math.floor(position / colWidth.value!);
-    if (!isStart) {
-      workdayDiff = workdayDiff - 1;
+    if (cellUnit.value === "day") {
+      let workdayDiff = Math.floor(position / colWidth.value!);
+      if (!isStart) {
+        workdayDiff = workdayDiff - 1;
+      }
+      return calculateDateFromWorkdays(startDate.value!, workdayDiff);
+    } else {
+      const monthDiff = position / colWidth.value;
+
+      // 拆分整月和小数部分
+      const wholeMonths = Math.floor(monthDiff); // 整月部分
+      const fractionMonths = monthDiff - wholeMonths; // 小数部分
+
+      // 计算整月后的日期
+      let calculatedDate = dayjs(startDate.value).add(wholeMonths, "month");
+
+      // 根据小数部分计算天数，并加上小数部分代表的天数
+      const daysInCurrentMonth = calculatedDate.daysInMonth(); // 当前整月有多少天
+      const extraDays = Math.round(fractionMonths * daysInCurrentMonth); // 计算小数月份转换的天数
+
+      // 加上计算出来的天数
+      calculatedDate = calculatedDate.add(extraDays, "day");
+      if (!isStart) {
+        calculatedDate = calculatedDate.subtract(1, "day");
+      }
+      return calculatedDate.format("YYYY-MM-DD");
     }
-    return calculateDateFromWorkdays(startDate.value!, workdayDiff);
   };
   return {
     time2position,

@@ -13,8 +13,8 @@ const { colWidth } = provideConfig();
 
 const firdayIndexList = computed(() => {
 	const indexList: number[] = [];
-	for (let index = 0; index < cols.length; index++) {
-		const element = cols[index];
+	for (let index = 0; index < cols.value.length; index++) {
+		const element = cols.value[index];
 		if (element.day() === 5) {
 			indexList.push(index)
 		}

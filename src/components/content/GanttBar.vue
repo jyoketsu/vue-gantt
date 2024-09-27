@@ -27,6 +27,7 @@ import useTime2Position from '../../composables/useTime2Position';
 import { getDefaultStyle } from '../../util';
 import { useThrottle } from '../../composables/useThrottle';
 import provideEmitBarEvent from '../../provider/provideEmitBarEvent';
+import dayjs from 'dayjs';
 
 const props = defineProps<{
 	project: Project;
@@ -42,7 +43,7 @@ const emit = defineEmits<{
 
 const config = provideConfig();
 const emitBarEvent = provideEmitBarEvent();
-const { startDate, endDate, colWidth, rowHeight } = config;
+const { startDate, endDate, colWidth, rowHeight, cellUnit } = config;
 
 const { project } = toRefs(props)
 // const project = ref({ ...props.project })
@@ -89,10 +90,14 @@ const onMouseEvent = (e: MouseEvent) => {
 			(e: MouseEvent) => {
 				window.removeEventListener("mousemove", dragCallBack)
 
-				xStart.value = getRoundedPosition(xStart.value)
-				xEnd.value = getRoundedPosition(xEnd.value)
-				const newStartDate = position2time(xStart.value, true);
-				const newEndDate = position2time(xEnd.value, false);
+				if (cellUnit.value === 'day') {
+					xStart.value = getRoundedPosition(xStart.value)
+					xEnd.value = getRoundedPosition(xEnd.value)
+				}
+
+				const newStartDate = getLatestWorkday(position2time(xStart.value, true));
+				const newEndDate = getLatestWorkday(position2time(xEnd.value, false));
+
 				if (isDragging.value) {
 					emitBarEvent('dragend-bar', e, { ...project.value, startDate: newStartDate, endDate: newEndDate }, props.index, props.rowIndex);
 				}
@@ -193,5 +198,18 @@ const isMovable = (movedX: number) => {
 
 const getRoundedPosition = (position: number) => {
 	return Math.round(position / colWidth.value) * colWidth.value;
+};
+
+const getLatestWorkday = (time: string): string => {
+	let date = dayjs(time);
+
+	// 循环，直到找到工作日为止
+	while (date.day() === 0 || date.day() === 6) {
+		// 如果是周六（6）或者周日（0），则加一天，继续检查
+		date = date.add(1, "day");
+	}
+
+	// 返回找到的最近工作日，格式为 YYYY-MM-DD
+	return date.format("YYYY-MM-DD");
 };
 </script>

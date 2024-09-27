@@ -57,7 +57,7 @@ export const ganttTestData = [
     position: "运维",
     name: "Gantt 7",
     projects: [
-      { name: "Project 1", startDate: "2024-01-05", endDate: "2024-02-03" },
+      { name: "Project 1", startDate: "2024-09-01", endDate: "2024-10-01" },
       { name: "Project 2", startDate: "2024-03-15", endDate: "2024-04-10" },
       { name: "Project 3", startDate: "2024-12-01", endDate: "2024-12-28" },
     ],
