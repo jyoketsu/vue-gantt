@@ -1,8 +1,8 @@
 import { inject } from "vue";
-import { WORK_DAYS } from "./symbols.js";
+import { COLS } from "./symbols.js";
 
 export default function provideWorkDays() {
-  const config = inject(WORK_DAYS);
+  const config = inject(COLS);
   if (!config) {
     throw Error("Failed to inject work days!");
   }

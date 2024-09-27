@@ -5,16 +5,16 @@
 
 <script setup lang="ts">
 import { computed } from 'vue';
-import provideWorkDays from '../../provider/provideWorkDays';
+import provideCols from '../../provider/provideCols';
 import provideConfig from '../../provider/provideConfig';
 
-const workdays = provideWorkDays();
+const cols = provideCols();
 const { colWidth } = provideConfig();
 
 const firdayIndexList = computed(() => {
 	const indexList: number[] = [];
-	for (let index = 0; index < workdays.length; index++) {
-		const element = workdays[index];
+	for (let index = 0; index < cols.length; index++) {
+		const element = cols[index];
 		if (element.day() === 5) {
 			indexList.push(index)
 		}

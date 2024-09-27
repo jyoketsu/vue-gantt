@@ -37,7 +37,7 @@ import { computed, provide, ref, toRefs } from 'vue';
 import TimeHead from './components/TimeHead.vue';
 import Left from './components/Left.vue';
 import Content from './components/content/index.vue';
-import { CONFIG, EMIT_BAR_EVENT, EMIT_ROW_EVENT, WORK_DAYS } from './provider/symbols';
+import { CONFIG, EMIT_BAR_EVENT, EMIT_ROW_EVENT, COLS } from './provider/symbols';
 import { isWeekday } from './util';
 import { useThrottle } from './composables/useThrottle';
 
@@ -46,7 +46,8 @@ const props = withDefaults(defineProps<GanttProps>(), {
 	headHeight: 32,
 	colWidth: 32,
 	rowActiveBackgroundColor: '#cbe3f1',
-	rowActiveBorderColor: '#a4cee7'
+	rowActiveBorderColor: '#a4cee7',
+	cellUnit: 'day'
 })
 
 const emit = defineEmits<{
@@ -75,20 +76,20 @@ const isDragging = ref(false);
 const clickX = ref(0);
 const gapTime = 16.666;
 
-const workdays = computed(() => {
+const cols = computed(() => {
 	let start = dayjs(props.startDate);
 	const end = dayjs(props.endDate);
-	const workdays: dayjs.Dayjs[] = [];
+	const cols: dayjs.Dayjs[] = [];
 
 	// Loop through each day between startDate and endDate
 	while (start.isBefore(end) || start.isSame(end, 'day')) {
 		if (isWeekday(start)) {
-			workdays.push(start);
+			cols.push(start);
 		}
 		// Move to the next day
 		start = start.add(1, 'day');
 	}
-	return workdays;
+	return cols;
 })
 
 const handleMouseDown = (e: MouseEvent) => {
@@ -147,7 +148,7 @@ const emitRowEvent = (e: MouseEvent,
 	emit('click-row', { e, row, time, rowIndex })
 }
 
-provide(WORK_DAYS, workdays.value);
+provide(COLS, cols.value);
 provide(CONFIG, {
 	...toRefs(props)
 });

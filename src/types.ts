@@ -22,6 +22,7 @@ export interface GanttConfig {
   colWidth?: number;
   rowActiveBackgroundColor?: string;
   rowActiveBorderColor?: string;
+  cellUnit?: "day" | "month";
 }
 
 export interface GanttProps extends GanttConfig {
