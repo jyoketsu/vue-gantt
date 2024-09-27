@@ -15,7 +15,11 @@
 		</div>
 		<div class="flex-1 overflow-auto">
 			<div class="w-fit h-full relative overflow-hidden">
-				<TimeHead />
+				<TimeHead>
+					<template #gantt-head-cell="{ cell }">
+						<slot name="gantt-head-cell" :cell="cell" />
+					</template>
+				</TimeHead>
 				<Content>
 					<template #gantt-bar-content="{ project }">
 						<slot name="gantt-bar-content" :project="project" />

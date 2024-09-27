@@ -4,7 +4,7 @@
 		@click="handleClick" @mouseenter="isHover = true" @mouseleave="isHover = false">
 		<Transition>
 			<div v-if="isDragging" class="size-full flex">
-				<div v-for="(day, index) in workdays" :key="index"
+				<div v-for="(, index) in workdays" :key="index"
 					class="pointer-events-none h-full flex-shrink-0 border-l-2 transition-colors duration-500"
 					:style="{ width: `${colWidth}px`, backgroundColor: index >= indexStart && index <= indexEnd ? rowActiveBorderColor : rowActiveBackgroundColor, borderColor: rowActiveBorderColor }">
 				</div>
@@ -23,7 +23,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref, watch } from 'vue';
+import { computed, ref } from 'vue';
 import useTime2Position from '../../composables/useTime2Position';
 import provideConfig from '../../provider/provideConfig';
 import provideEmitRowEvent from '../../provider/provideEmitRowEvent';
