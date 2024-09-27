@@ -34,6 +34,12 @@ const props = defineProps<{
 	index: number;
 }>();
 
+const emit = defineEmits<{
+	(e: "dragging-start"): void
+	(e: "dragging-end"): void
+	(e: "dragging", value: { xStart: number; xEnd: number }): void
+}>()
+
 const config = provideConfig();
 const emitBarEvent = provideEmitBarEvent();
 const { startDate, endDate, colWidth, rowHeight } = config;
@@ -91,6 +97,7 @@ const onMouseEvent = (e: MouseEvent) => {
 					emitBarEvent('dragend-bar', e, { ...project.value, startDate: newStartDate, endDate: newEndDate }, props.index, props.rowIndex);
 				}
 				isDragging.value = false
+				emit('dragging-end')
 			},
 			{ once: true }
 		)
@@ -105,6 +112,7 @@ const handleClick = (e: MouseEvent) => {
 const dragBar = useThrottle((e: MouseEvent) => {
 	if (!isDragging.value) {
 		isDragging.value = true;
+		emit('dragging-start')
 	}
 
 	const movedX = e.clientX - clickX.value;
@@ -112,6 +120,7 @@ const dragBar = useThrottle((e: MouseEvent) => {
 	if (isMovable(movedX)) {
 		xStart.value += movedX;
 		xEnd.value += movedX;
+		emit('dragging', { xStart: xStart.value, xEnd: xEnd.value })
 	}
 
 	clickX.value = e.clientX;
@@ -120,12 +129,14 @@ const dragBar = useThrottle((e: MouseEvent) => {
 const dragBarByLeftHandle = useThrottle((e: MouseEvent) => {
 	if (!isDragging.value) {
 		isDragging.value = true;
+		emit('dragging-start')
 	}
 
 	const movedX = e.clientX - clickX.value;
 
 	if (isMovable(movedX) && (xEnd.value - (xStart.value + movedX) > colWidth.value)) {
 		xStart.value += movedX;
+		emit('dragging', { xStart: xStart.value, xEnd: xEnd.value })
 	}
 
 	clickX.value = e.clientX;
@@ -134,12 +145,14 @@ const dragBarByLeftHandle = useThrottle((e: MouseEvent) => {
 const dragBarByRightHandle = useThrottle((e: MouseEvent) => {
 	if (!isDragging.value) {
 		isDragging.value = true;
+		emit('dragging-start')
 	}
 
 	const movedX = e.clientX - clickX.value;
 
 	if (isMovable(movedX) && (xEnd.value + movedX - (xStart.value) > colWidth.value)) {
 		xEnd.value += movedX;
+		emit('dragging', { xStart: xStart.value, xEnd: xEnd.value })
 	}
 
 	clickX.value = e.clientX;

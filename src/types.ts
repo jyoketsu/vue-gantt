@@ -20,6 +20,8 @@ export interface GanttConfig {
   rowHeight?: number;
   headHeight?: number;
   colWidth?: number;
+  rowActiveBackgroundColor?: string;
+  rowActiveBorderColor?: string;
 }
 
 export interface GanttProps extends GanttConfig {

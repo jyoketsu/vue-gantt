@@ -41,6 +41,8 @@ const props = withDefaults(defineProps<GanttProps>(), {
 	rowHeight: 36,
 	headHeight: 32,
 	colWidth: 32,
+	rowActiveBackgroundColor: '#cbe3f1',
+	rowActiveBorderColor: '#a4cee7'
 })
 
 const emit = defineEmits<{
