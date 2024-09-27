@@ -1,6 +1,8 @@
 <template>
   <GanttChart :data="data" :start-date="startDate" :end-date="endDate"
-    @dragend-bar="handleDragEnd($event.e, $event.bar, $event.barIndex, $event.rowIndex)">
+    @dragend-bar="handleDragEnd($event.e, $event.bar, $event.barIndex, $event.rowIndex)"
+    @click-bar="handleClickBar($event.e, $event.bar, $event.barIndex, $event.rowIndex)"
+    @click-row="handleClickRow($event.e, $event.row, $event.time, $event.rowIndex)">
     <template #gantt-left-head>
       <div class="size-full grid grid-cols-3">
         <div class="px-1 border-r">职位</div>
@@ -16,9 +18,9 @@
       </div>
     </template>
     <template #gantt-bar-content="{ project }">
-      <div class="w-full h-full overflow-hidden text-sm flex justify-center items-center"
-        :title="project.name">
-        <span class="overflow-hidden whitespace-nowrap text-ellipsis">{{ `${project.startDate} : ${project.endDate}` }}</span>
+      <div class="w-full h-full overflow-hidden text-sm flex justify-center items-center" :title="project.name">
+        <span class="overflow-hidden whitespace-nowrap text-ellipsis">{{ `${project.startDate} : ${project.endDate}`
+          }}</span>
       </div>
     </template>
   </GanttChart>
@@ -30,9 +32,9 @@ import GanttChart from './Gantt.vue'
 import { ganttTestData } from './demoData';
 import dayjs from 'dayjs';
 import { isWeekday } from './util';
-import { Project } from './types';
+import { Gantt, Project } from './types';
 
-const startDate = ref(dayjs().format('YYYY-MM-DD'))
+const startDate = ref(dayjs('2024-09-24').format('YYYY-MM-DD'))
 const endDate = ref(dayjs().add(3, 'month').format())
 const data = reactive(ganttTestData)
 
@@ -69,12 +71,29 @@ const calculateWorkingHoursForRow = (projects: any[]): number => {
   return totalWorkingHours;
 };
 
-const handleDragEnd = (e: MouseEvent,
+const handleDragEnd = (
+  e: MouseEvent,
   bar: Project,
   barIndex: number,
   rowIndex: number) => {
   console.log('---drag-end---', e, bar, barIndex, rowIndex);
   data[rowIndex].projects[barIndex] = bar;
+}
+
+const handleClickBar = (
+  e: MouseEvent,
+  bar: Project,
+  barIndex: number,
+  rowIndex: number) => {
+  console.log('---click-bar---', e, bar, barIndex, rowIndex);
+}
+
+const handleClickRow = (
+  e: MouseEvent,
+  row: Gantt,
+  time: string,
+  rowIndex: number) => {
+  console.log('---click-row---', e, row, time, rowIndex);
 }
 </script>
 

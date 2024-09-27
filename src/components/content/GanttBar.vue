@@ -11,7 +11,7 @@
 			color: project.color || defaultColor,
 			zIndex: isDragging ? 3 : 2,
 			transition: isDragging ? 'none' : 'left 0.5s,width 0.5s'
-		}" @mousedown="onMouseEvent">
+		}" @mousedown="onMouseEvent" @click="handleClick">
 		<slot name="gantt-bar-content" :project="project">
 			<span class="text-sm px-2">{{ project.name }}</span>
 		</slot>
@@ -82,16 +82,24 @@ const onMouseEvent = (e: MouseEvent) => {
 			"mouseup",
 			(e: MouseEvent) => {
 				window.removeEventListener("mousemove", dragCallBack)
-				isDragging.value = false
+
 				xStart.value = getRoundedPosition(xStart.value)
 				xEnd.value = getRoundedPosition(xEnd.value)
 				const newStartDate = position2time(xStart.value, true);
 				const newEndDate = position2time(xEnd.value, false);
-				emitBarEvent(e, { ...project.value, startDate: newStartDate, endDate: newEndDate }, props.index, props.rowIndex);
+				if (isDragging.value) {
+					emitBarEvent('dragend-bar', e, { ...project.value, startDate: newStartDate, endDate: newEndDate }, props.index, props.rowIndex);
+				}
+				isDragging.value = false
 			},
 			{ once: true }
 		)
 	}
+}
+
+const handleClick = (e: MouseEvent) => {
+	e.stopPropagation();
+	emitBarEvent('click-bar', e, { ...project.value }, props.index, props.rowIndex);
 }
 
 const dragBar = useThrottle((e: MouseEvent) => {

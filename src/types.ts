@@ -29,8 +29,16 @@ export interface GanttProps extends GanttConfig {
 export type Config = ToRefs<Required<GanttProps>>;
 
 export type EmitBarEvent = (
+  type: string,
   e: MouseEvent,
   bar: Project,
   barIndex: number,
+  rowIndex: number
+) => void;
+
+export type EmitRowEvent = (
+  e: MouseEvent,
+  row: Gantt,
+  time: string,
   rowIndex: number
 ) => void;

@@ -28,12 +28,12 @@
 
 <script setup lang="ts">
 import dayjs from 'dayjs';
-import { GanttProps, Project } from './types';
+import { Gantt, GanttProps, Project } from './types';
 import { computed, provide, ref, toRefs } from 'vue';
 import TimeHead from './components/TimeHead.vue';
 import Left from './components/Left.vue';
 import Content from './components/content/index.vue';
-import { CONFIG, EMIT_BAR_EVENT, WORK_DAYS } from './provider/symbols';
+import { CONFIG, EMIT_BAR_EVENT, EMIT_ROW_EVENT, WORK_DAYS } from './provider/symbols';
 import { isWeekday } from './util';
 import { useThrottle } from './composables/useThrottle';
 
@@ -48,6 +48,18 @@ const emit = defineEmits<{
 		e: MouseEvent,
 		bar: Project,
 		barIndex: number,
+		rowIndex: number
+	}): void
+	(e: "click-bar", value: {
+		e: MouseEvent,
+		bar: Project,
+		barIndex: number,
+		rowIndex: number
+	}): void
+	(e: "click-row", value: {
+		e: MouseEvent,
+		row: Gantt,
+		time: string,
 		rowIndex: number
 	}): void
 }>()
@@ -80,7 +92,7 @@ const handleMouseDown = (e: MouseEvent) => {
 		window.addEventListener("mousemove", dragBar)
 		window.addEventListener(
 			"mouseup",
-			(e: MouseEvent) => {
+			() => {
 				window.removeEventListener("mousemove", dragBar)
 				isDragging.value = false
 			},
@@ -104,12 +116,29 @@ const dragBar = useThrottle((e: MouseEvent) => {
 }, gapTime);
 
 const emitBarEvent = (
+	type: string,
 	e: MouseEvent,
 	bar: Project,
 	barIndex: number,
 	rowIndex: number
 ) => {
-	emit("dragend-bar", { e, bar, barIndex, rowIndex })
+	switch (type) {
+		case 'dragend-bar':
+			emit(type, { e, bar, barIndex, rowIndex })
+			break;
+		case 'click-bar':
+			emit(type, { e, bar, barIndex, rowIndex })
+			break;
+		default:
+			break;
+	}
+}
+
+const emitRowEvent = (e: MouseEvent,
+	row: Gantt,
+	time: string,
+	rowIndex: number) => {
+	emit('click-row', { e, row, time, rowIndex })
 }
 
 provide(WORK_DAYS, workdays.value);
@@ -117,4 +146,5 @@ provide(CONFIG, {
 	...toRefs(props)
 });
 provide(EMIT_BAR_EVENT, emitBarEvent)
+provide(EMIT_ROW_EVENT, emitRowEvent)
 </script>
