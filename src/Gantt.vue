@@ -1,45 +1,51 @@
 <template>
-	<div class="size-full flex select-none">
-		<div class="overflow-hidden" :style="{ width: `${leftWidth}px` }">
-			<Left>
-				<template #gantt-left-head>
-					<slot name="gantt-left-head" />
-				</template>
-				<template #gantt-left-row="{ row }">
-					<slot name="gantt-left-row" :row="row" />
-				</template>
-			</Left>
-		</div>
-		<div class="w-[1px] h-full border-r relative overflow-visible cursor-ew-resize" @mousedown="handleMouseDown">
-			<div class="absolute -left-3 top-0 -right-3 bottom-0"></div>
-		</div>
-		<div class="flex-1 overflow-auto">
-			<div class="w-fit h-full relative overflow-hidden">
-				<TimeHead>
-					<template #gantt-head-cell="{ cell }">
-						<slot name="gantt-head-cell" :cell="cell" />
+	<div class="size-full flex flex-col overflow-hidden">
+		<div class="flex-1 overflow-hidden flex select-none">
+			<div class="h-full overflow-hidden" :style="{ width: `${leftWidth}px` }">
+				<Left :scrolled-y="scrolledY">
+					<template #gantt-left-head>
+						<slot name="gantt-left-head" />
 					</template>
-				</TimeHead>
-				<Content>
-					<template #gantt-bar-content="{ project }">
-						<slot name="gantt-bar-content" :project="project" />
+					<template #gantt-left-row="{ row }">
+						<slot name="gantt-left-row" :row="row" />
 					</template>
-				</Content>
+				</Left>
 			</div>
+			<div class="w-[1px] h-full border-r relative overflow-visible cursor-ew-resize" @mousedown="handleMouseDown">
+				<div class="absolute -left-3 top-0 -right-3 bottom-0"></div>
+			</div>
+			<div class="flex-1 overflow-hidden">
+				<div class="w-fit h-full relative overflow-hidden" :style="{ transform: `translateX(-${scrolledX}px)` }">
+					<TimeHead>
+						<template #gantt-head-cell="{ cell }">
+							<slot name="gantt-head-cell" :cell="cell" />
+						</template>
+					</TimeHead>
+					<Content :scrolled-y="scrolledY">
+						<template #gantt-bar-content="{ project }">
+							<slot name="gantt-bar-content" :project="project" />
+						</template>
+					</Content>
+				</div>
+			</div>
+			<VerticalScrollBar @scroll="(scrolled) => scrolledY = scrolled" />
 		</div>
+		<HorizontalScrollBar :left-width="leftWidth" @scroll="(scrolled) => scrolledX = scrolled" />
 	</div>
 </template>
 
 <script setup lang="ts">
 import dayjs from 'dayjs';
 import { Gantt, GanttProps, Project } from './types';
-import { computed, provide, ref, toRef, toRefs } from 'vue';
+import { computed, provide, ref, toRefs } from 'vue';
 import TimeHead from './components/TimeHead.vue';
 import Left from './components/Left.vue';
 import Content from './components/content/index.vue';
 import { CONFIG, EMIT_BAR_EVENT, EMIT_ROW_EVENT, COLS } from './provider/symbols';
 import { getMonthFirstDay, isWeekday } from './util';
 import { useThrottle } from './composables/useThrottle';
+import VerticalScrollBar from './components/VerticalScrollBar.vue';
+import HorizontalScrollBar from './components/HorizontalScrollBar.vue';
 
 const props = withDefaults(defineProps<GanttProps>(), {
 	rowHeight: 36,
@@ -73,6 +79,8 @@ const emit = defineEmits<{
 
 const leftWidth = ref(272);
 const isDragging = ref(false);
+const scrolledY = ref(0);
+const scrolledX = ref(0);
 const clickX = ref(0);
 const gapTime = 16.666;
 

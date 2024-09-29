@@ -1,5 +1,5 @@
 <template>
-	<div class="w-fit flex border-b" :style="{ height: `${headHeight}px` }">
+	<div class="relative w-fit flex border-b z-[999] bg-white" :style="{ height: `${headHeight}px` }">
 		<div v-for="(day, index) in cols" :key="index"
 			class="h-full flex-shrink-0 overflow-visible transition-width duration-500"
 			:class="{ 'border-r': cellUnit === 'month' }" :style="{ width: `${colWidth}px` }">
@@ -9,7 +9,8 @@
 					{{ day.format('MM/DD') }}
 				</span>
 				<span v-if="cellUnit === 'month'" class="text-zinc-400 text-sm leading-8 px-2"
-					:style="{ lineHeight: `${headHeight}px` }">{{ day.month() === 0 ? day.format('YYYY-MM') : day.format('MM')
+					:style="{ lineHeight: `${headHeight}px` }">{{ index === 0 || day.month() === 0 ? day.format('YYYY-MM') :
+						day.format('MM')
 					}}</span>
 			</slot>
 		</div>

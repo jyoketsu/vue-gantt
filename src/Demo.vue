@@ -2,11 +2,13 @@
   <div class="size-full flex flex-col">
     <div class="w-full h-8 border-b flex items-center p-2 space-x-2 text-zinc-400">
       <span class="flex-1"></span>
-      <span class="cursor-pointer" :class="{ 'text-blue-400': cellUnit === 'day' }" @click="cellUnit = 'day'">M</span>
+      <span class="cursor-pointer" :class="{ 'text-blue-400': cellUnit === 'day' }" @click="cellUnit = 'day'">月视图</span>
       <span class="cursor-pointer" :class="{ 'text-blue-400': cellUnit === 'month' }"
-        @click="cellUnit = 'month'">Y</span>
+        @click="cellUnit = 'month'">年视图</span>
+      <div class="w-[1px] h-full border-r" />
+      <span class="cursor-pointer" @click="toNow">现在</span>
     </div>
-    <div class="flex-1">
+    <div class="flex-1 overflow-hidden">
       <GanttChart :data="data" :start-date="startDate" :end-date="endDate" :cell-unit="cellUnit" :col-width="colWidth"
         @dragend-bar="handleDragEnd($event.e, $event.bar, $event.barIndex, $event.rowIndex)"
         @click-bar="handleClickBar($event.e, $event.bar, $event.barIndex, $event.rowIndex)"
@@ -33,7 +35,7 @@
         </template>
       </GanttChart>
     </div>
-
+    <div class="h-[700px]"></div>
   </div>
 
 </template>
@@ -49,7 +51,7 @@ import { Gantt, Project } from './types';
 const startDate = ref(dayjs('2024-02-01').format('YYYY-MM-DD'))
 const endDate = ref(dayjs('2024-02-01').add(12, 'month').format())
 const data = reactive(ganttTestData)
-const cellUnit = ref<'day' | 'month'>('month')
+const cellUnit = ref<'day' | 'month'>('day')
 const colWidth = computed(() => cellUnit.value === 'day' ? 32 : 120)
 
 const calculateWorkingDays = (
@@ -84,6 +86,11 @@ const calculateWorkingHoursForRow = (projects: any[]): number => {
 
   return totalWorkingHours;
 };
+
+const toNow = () => {
+  startDate.value = dayjs().format('YYYY-MM-DD')
+  endDate.value = dayjs().add(12, 'month').format()
+}
 
 const handleDragEnd = (
   e: MouseEvent,
