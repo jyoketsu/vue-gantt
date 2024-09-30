@@ -3,6 +3,20 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "exports": {
+    ".": {
+      "types": "./lib_types/vue-gantt.d.ts",
+      "import": "./lib/vue-gantt.js",
+      "require": "./lib/vue-gantt.umd.cjs"
+    }
+  },
+  "main": "./lib/vue-gantt.umd.cjs",
+  "types": "./lib_types/vue-gantt.d.ts",
+  "files": [
+    "lib_types",
+    "lib/vue-gantt.js",
+    "lib/vue-gantt.umd.cjs"
+  ],
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc -b && vite build",

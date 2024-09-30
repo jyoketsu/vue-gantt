@@ -4,7 +4,7 @@
 		@click="handleClick" @mouseenter="isHover = true" @mouseleave="isHover = false">
 		<Transition>
 			<div v-if="isDragging" class="size-full flex">
-				<div v-for="(col, index) in cols" :key="index"
+				<div v-for="(col, index) in cols" :key="`${index}-${col.toString()}`"
 					class="pointer-events-none h-full flex-shrink-0 border-l-2 transition-colors duration-500"
 					:style="{ width: `${colWidth}px`, backgroundColor: index >= indexStart && index <= indexEnd ? rowActiveBorderColor : rowActiveBackgroundColor, borderColor: rowActiveBorderColor }">
 				</div>

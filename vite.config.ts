@@ -1,4 +1,4 @@
-import { fileURLToPath, URL } from "node:url"
+import { fileURLToPath, URL } from "node:url";
 import { defineConfig } from "vite";
 import vue from "@vitejs/plugin-vue";
 
@@ -10,10 +10,10 @@ export default defineConfig({
       process.env.NODE_ENV === "production"
         ? {
             entry: fileURLToPath(
-              new URL("src/vue-ganttastic.ts", import.meta.url)
+              new URL("src/vue-gantt.ts", import.meta.url)
             ),
             name: "VueGanttastic",
-            fileName: "vue-ganttastic"
+            fileName: "vue-gantt"
           }
         : undefined,
     outDir: process.env.NODE_ENV === "production" ? "lib" : "dist",

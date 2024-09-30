@@ -1,5 +1,5 @@
 <template>
-	<div class="size-full flex flex-col overflow-hidden">
+	<div class="size-full flex flex-col overflow-hidden bg-white">
 		<div class="flex-1 overflow-hidden flex select-none">
 			<div class="h-full overflow-hidden" :style="{ width: `${leftWidth}px` }">
 				<Left :scrolled-y="scrolledY">
@@ -53,7 +53,8 @@ const props = withDefaults(defineProps<GanttProps>(), {
 	colWidth: 32,
 	rowActiveBackgroundColor: '#cbe3f1',
 	rowActiveBorderColor: '#a4cee7',
-	cellUnit: 'day'
+	cellUnit: 'day',
+	leftWidth: 320
 })
 
 const emit = defineEmits<{
@@ -77,7 +78,7 @@ const emit = defineEmits<{
 	}): void
 }>()
 
-const leftWidth = ref(272);
+const leftWidth = ref(props.leftWidth);
 const isDragging = ref(false);
 const scrolledY = ref(0);
 const scrolledX = ref(0);

@@ -1,5 +1,4 @@
-import dayjs from "dayjs";
-import { ToRef, ToRefs } from "vue";
+import { ToRefs } from "vue";
 
 export interface Gantt {
   [key: string]: any;
@@ -24,6 +23,7 @@ export interface GanttConfig {
   rowActiveBackgroundColor?: string;
   rowActiveBorderColor?: string;
   cellUnit?: "day" | "month";
+  leftWidth?: number;
 }
 
 export interface GanttProps extends GanttConfig {

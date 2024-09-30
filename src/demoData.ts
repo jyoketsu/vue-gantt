@@ -1,7 +1,7 @@
 export const ganttTestData = [
   {
-    position: "产品",
-    name: "Gantt 1",
+    position: "Product",
+    name: "Jing Yixian",
     projects: [
       { name: "Project 1", startDate: "2024-09-24", endDate: "2024-09-30" },
       { name: "Project 2", startDate: "2024-10-01", endDate: "2024-10-02" },
@@ -9,8 +9,8 @@ export const ganttTestData = [
     ],
   },
   {
-    position: "设计",
-    name: "Gantt 2",
+    position: "Design",
+    name: "Xu Quan",
     projects: [
       { name: "Project 1", startDate: "2024-10-05", endDate: "2024-10-28" },
       { name: "Project 2", startDate: "2024-12-12", endDate: "2025-01-09" },
@@ -18,8 +18,8 @@ export const ganttTestData = [
     ],
   },
   {
-    position: "开发",
-    name: "Gantt 3",
+    position: "Development",
+    name: "Li Jiameng",
     projects: [
       { name: "Project 1", startDate: "2024-05-03", endDate: "2024-05-30" },
       { name: "Project 2", startDate: "2024-09-11", endDate: "2024-10-09" },
@@ -27,8 +27,8 @@ export const ganttTestData = [
     ],
   },
   {
-    position: "开发",
-    name: "Gantt 4",
+    position: "Development",
+    name: "Liu Xinwei",
     projects: [
       { name: "Project 1", startDate: "2024-07-20", endDate: "2024-08-18" },
       { name: "Project 2", startDate: "2024-11-10", endDate: "2024-12-07" },
@@ -36,8 +36,8 @@ export const ganttTestData = [
     ],
   },
   {
-    position: "测试",
-    name: "Gantt 5",
+    position: "Testing",
+    name: "Jiang Song",
     projects: [
       { name: "Project 1", startDate: "2024-04-08", endDate: "2024-05-01" },
       { name: "Project 2", startDate: "2024-08-23", endDate: "2024-09-21" },
@@ -45,8 +45,8 @@ export const ganttTestData = [
     ],
   },
   {
-    position: "测试",
-    name: "Gantt 6",
+    position: "Testing",
+    name: "Song Nanxi",
     projects: [
       { name: "Project 1", startDate: "2024-02-14", endDate: "2024-03-10" },
       { name: "Project 2", startDate: "2024-06-18", endDate: "2024-07-16" },
@@ -54,8 +54,8 @@ export const ganttTestData = [
     ],
   },
   {
-    position: "运维",
-    name: "Gantt 7",
+    position: "Ops",
+    name: "Xue Xiaoxi",
     projects: [
       { name: "Project 1", startDate: "2024-09-01", endDate: "2024-10-01" },
       { name: "Project 2", startDate: "2024-03-15", endDate: "2024-04-10" },
@@ -63,8 +63,8 @@ export const ganttTestData = [
     ],
   },
   {
-    position: "财务",
-    name: "Gantt 8",
+    position: "Finance",
+    name: "Wei Chuanqi",
     projects: [
       { name: "Project 1", startDate: "2024-03-20", endDate: "2024-04-15" },
       { name: "Project 2", startDate: "2024-08-11", endDate: "2024-09-09" },
@@ -72,8 +72,8 @@ export const ganttTestData = [
     ],
   },
   {
-    position: "人事",
-    name: "Gantt 9",
+    position: "HR",
+    name: "Zhu Wenjie",
     projects: [
       { name: "Project 1", startDate: "2024-06-12", endDate: "2024-07-10" },
       { name: "Project 2", startDate: "2024-10-01", endDate: "2024-10-29" },
@@ -81,8 +81,8 @@ export const ganttTestData = [
     ],
   },
   {
-    position: "行政",
-    name: "Gantt 10",
+    position: "Administration",
+    name: "Lei Yufei",
     projects: [
       { name: "Project 1", startDate: "2024-04-01", endDate: "2024-04-28" },
       { name: "Project 2", startDate: "2024-07-22", endDate: "2024-08-19" },
