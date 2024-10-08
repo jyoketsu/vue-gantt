@@ -2,6 +2,8 @@
 
 <b>Vue Gantt</b> is a simple, interactive Gantt chart component for Vue 3, with a minimum unit of days.
 
+![image](./screenshot.png)
+
 ## Features
 
 - Full support for **Vue 3**
@@ -20,4 +22,5 @@
 [GitHub Repository](https://github.com/jyoketsu/vue-gantt)
 
 ## Support the project
+
 If you found the library helpful, any small tip would be greatly appreciated!
