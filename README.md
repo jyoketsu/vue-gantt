@@ -21,7 +21,7 @@ For further guides and references, check out the [official docs](https://jyokets
 
 Install
 
-```bash
+```sh
 npm install @jyoketsu/vue-gantt
 ```
 

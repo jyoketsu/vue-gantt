@@ -3,7 +3,7 @@
 		<div class="w-full border-b px-2 whitespace-nowrap overflow-hidden text-ellipsis"
 			:style="{ height: `${headHeight}px`, lineHeight: `${headHeight}px` }">
 			<slot name="gantt-left-head">
-				姓名
+				Name
 			</slot>
 		</div>
 		<div class="flex-1 overflow-hidden">

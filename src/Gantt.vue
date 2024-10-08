@@ -54,7 +54,7 @@ const props = withDefaults(defineProps<GanttProps>(), {
 	rowActiveBackgroundColor: '#cbe3f1',
 	rowActiveBorderColor: '#a4cee7',
 	cellUnit: 'day',
-	leftWidth: 320
+	leftWidth: 200
 })
 
 const emit = defineEmits<{

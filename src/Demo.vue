@@ -1,5 +1,5 @@
 <template>
-  <div class="size-full flex flex-col">
+  <div class="h-svh size-full flex flex-col">
     <div class="w-full h-8 border-b flex items-center p-2 space-x-2 text-zinc-400">
       <span class="flex-1"></span>
       <span class="cursor-pointer" :class="{ 'text-blue-400': cellUnit === 'day' }"
