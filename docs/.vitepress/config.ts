@@ -4,6 +4,7 @@ import { defineConfig } from "vitepress";
 export default defineConfig({
   title: "Vue-Gantt",
   description: "Gantt chart component for Vue 3",
+  base: '/vue-gantt/',
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
     nav: [
