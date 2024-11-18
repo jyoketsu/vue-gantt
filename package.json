@@ -1,8 +1,11 @@
 {
-  "name": "vue-gantt",
-  "private": true,
-  "version": "0.0.0",
+  "name": "@jyoketsu/vue-gantt",
+  "author": "xujie",
+  "version": "0.0.2",
   "type": "module",
+  "publishConfig": {
+    "access": "public"
+  },
   "exports": {
     ".": {
       "types": "./lib_types/vue-gantt.d.ts",
@@ -41,8 +44,15 @@
     "vue": "^3.2.40"
   },
   "dependencies": {
+    "@jyoketsu/vue-gantt": "file:",
     "dayjs": "^1.11.5",
     "vue": "^3.2.40",
     "vue-gantt": "file:"
-  }
+  },
+  "keywords": [
+    "vue3",
+    "gantt",
+    "甘特图",
+    "vue"
+  ]
 }
